@@ -1,0 +1,170 @@
+Assessment 2: Linear Regression
+Introduction
+
+Linear Regression is a Supervised Machine Learning algorithm used to predict continuous numerical values by finding the relationship between input variables (features) and an output variable (target).
+
+It is one of the simplest and most widely used machine learning algorithms.
+
+Definition
+
+Linear Regression predicts the value of a dependent variable based on one or more independent variables using a straight-line relationship.
+
+Formula:
+Y=mX+c
+
+Where:
+
+Y = Predicted value (dependent variable)
+X = Input feature (independent variable)
+m = Slope of the line
+c = Intercept
+
+How Linear Regression Works
+Step 1: Collect Data
+
+Example:
+
+Years of Experience	Salary (₹)
+1	300000
+2	400000
+3	500000
+4	600000
+
+Step 2: Find Relationship
+
+The algorithm identifies the relationship between:
+
+Experience
+Salary
+
+Step 3: Draw Best Fit Line
+
+Linear Regression finds the line that best fits the data points.
+
+Salary
+  ^
+  |
+600k      *
+500k    *
+400k  *
+300k *
+  |
+  +-------------------->
+      Experience
+
+Step 4: Predict Values
+
+If experience = 5 years,
+
+The model predicts:
+
+Salary ≈ ₹700,000
+
+
+Real time Example:
+
+1. House Price Prediction (Most Common Example)
+Input (X): Size of house (sq.ft), number of rooms
+Output (Y): Price of house
+
+ Relationship:
+As size increases → price increases (linear trend)
+
+Equation:
+
+Price=m×Size+c
+
+Used by real estate companies to estimate property value
+
+2. Salary Prediction
+Input: Years of experience
+Output: Salary
+
+ Example:
+
+1 year → ₹3 LPA
+5 years → ₹10 LPA
+
+HR analytics uses this to estimate salary ranges
+
+3. Sales Forecasting
+Input: Advertising spend (TV, social media)
+Output: Sales revenue
+
+ More marketing → more sales (approximately linear)
+
+Used in business decision-making
+
+4. Student Performance Prediction
+Input: Study hours
+Output: Marks
+
+ More study hours → higher marks
+
+Used in educational analytics systems
+
+5. Temperature Prediction
+Input: Time (hours/days)
+Output: Temperature
+
+Used in basic weather trend analysis
+
+6. Electricity Consumption
+Input: Number of appliances / usage hours
+Output: Power consumption
+
+Used in smart energy systems
+
+Application uses Linear Regression:
+
+1. Real Estate Websites
+Zillow
+MagicBricks
+
+Use Linear Regression (and advanced models) to:
+
+Estimate house prices
+Show “expected market value”
+
+2. Job & Salary Platforms
+Glassdoor
+LinkedIn
+
+Use regression models to:
+
+Predict salary ranges
+Analyze trends based on experience & role
+
+3. E-commerce & Sales Platforms
+Amazon
+
+Use regression for:
+
+Sales forecasting
+Demand prediction
+Pricing strategies
+
+4. Ride & Delivery Apps
+Uber
+Swiggy
+
+Use regression to estimate:
+
+Delivery time
+Ride fare (basic component)
+
+5. Weather & Energy Platforms
+AccuWeather
+
+Use regression for:
+
+Short-term temperature trends
+Energy consumption prediction
+
+Conclusion
+
+Linear Regression is a supervised learning algorithm used to predict continuous values by modeling the relationship between input and output variables. It is commonly used for salary prediction, house price estimation, temperature forecasting, and sales prediction.
+
+Short Interview Answer
+
+"Linear Regression is a supervised machine learning algorithm used to predict continuous numerical values by establishing a linear relationship between input features and the target variable."
