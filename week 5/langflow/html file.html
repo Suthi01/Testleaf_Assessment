@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Message</title>
+</head>
+<body>
+    <p>Converting a Python script that relies on `torch.hub` and `mediapipe` to Java requires a shift in architecture. Java does not have a direct equivalent to `torch.hub.load`. To make this production-ready, you should use **ONNX Runtime** (to run the YOLOv5 model) and the **MediaPipe Java SDK**.
+
+Below is the structured Java implementation. Note that you will need to add the `opencv`, `onnxruntime`, and `mediapipe` dependencies to your `pom.xml` or `build.gradle`.
+
+### 1. Data Structures
+First, define a class to hold detection results.
+
+```java
+import java.util.List;
+
+public class Detection {
+    public String label;
+    public int x1, y1, x2, y2;
+    public double confidence;
+
+    public Detection(String label, int x1, int y1, int x2, int y2, double confidence) {
+        this.label = label;
+        this.x1 = x1; this.y1 = y1; this.x2 = x2; this.y2 = y2;
+        this.confidence = confidence;
+    }
+}
+```
+
+### 2. Main Processing Logic
+This class handles the video loop and coordinates between the YOLO model and MediaPipe.
+
+```java
+import org.opencv.core.*;
+import org.opencv.videoio.VideoCapture;
+import java.util.*;
+
+public class ActivityAnalyzer {
+    static { System.loadLibrary(Core.NATIVE_LIBRARY_NAME); }
+
+    private YOLOModel yolo; // Wrapper for ONNX Runtime
+    private PoseEstimator poseEstimator; // Wrapper for MediaPipe Java
+
+    public ActivityAnalyzer() {
+        this.yolo = new YOLOModel("yolov5s.onnx");
+        this.poseEstimator = new PoseEstimator();
+    }
+
+    public void processVideo(String videoPath) {
+        VideoCapture capture = new VideoCapture(videoPath);
+        Mat frame = new Mat();
+        List<Map<Integer, Point>> history = new ArrayList<>();
+
+        while (capture.read(frame)) {
+            // 1. Detect Humans
+            List<Detection> detections = yolo.detect(frame);
+            
+            // 2. Pose Estimation for each human
+            Map<Integer, Point> framePositions = new HashMap<>();
+            for (Detection d : detections) {
+                if (d.label.equals("person")) {
+                    Point center = poseEstimator.getCenter(frame, d);
+                    framePositions.put(d.hashCode(), center);
+                }
+            }
+            history.add(framePositions);
+        }
+        
+        String report = generateReport(history);
+        saveReport(report);
+    }
+
+    private String generateReport(List<Map<Integer, Point>> history) {
+        int activeCount = 0;
+        // Logic: Compare positions across frames to detect movement
+        // If distance > threshold, increment activeCount
+        return "Analysis complete. Active persons: " + activeCount;
+    }
+
+    private void saveReport(String content) {
+        try (java.io.PrintWriter out = new java.io.PrintWriter("report.txt")) {
+            out.println(content);
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+}
+```
+
+### Key Implementation Notes for Production:
+
+1.  **YOLOv5 Model:** You cannot use `torch.hub.load` in Java. You must export your YOLOv5 model to **ONNX** format using `export.py` in the original Python repo:
+    `python export.py --weights yolov5s.pt --include onnx`
+    Then, use the **ONNX Runtime Java API** to load and run inference.
+2.  **MediaPipe:** MediaPipe provides a [Java API](https://developers.google.com/mediapipe/solutions/vision/pose_landmarker/java). You will need to initialize the `PoseLandmarker` object and pass the `Mat` (converted to a `MPImage`) to it.
+3.  **Performance:** 
+    *   **OpenCV `Mat`:** Ensure you are not creating new `Mat` objects inside the loop unnecessarily to avoid memory leaks. Use `frame.release()` where appropriate.
+    *   **Threading:** For production, run the YOLO inference and MediaPipe processing in a separate thread from the video reading loop to prevent frame drops.
+4.  **Dependencies:**
+    *   **OpenCV:** Use `org.openpnp:opencv`.
+    *   **ONNX Runtime:** Use `com.microsoft.onnxruntime:onnxruntime`.
+    *   **MediaPipe:** Use `com.google.mediapipe:tasks-vision`.
+
+### Why this approach?
+*   **ONNX Runtime** is the industry standard for running PyTorch-trained models in Java/C# environments.
+*   **MediaPipe Java SDK** is the official way to use Google's pose estimation outside of Python.
+*   **Separation of Concerns:** By creating `YOLOModel` and `PoseEstimator` wrapper classes, you keep the main logic clean and maintainable.</p>
+</body>
+</html>

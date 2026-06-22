@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q&A Bot - Document Question Answering</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📄 Q&A Bot</h1>
+            <p class="subtitle">Document Question Answering System</p>
+        </header>
+
+        <main>
+            <!-- Status Section -->
+            <section class="status-section">
+                <div id="status" class="status-badge status-checking">
+                    ⏳ Checking connection...
+                </div>
+            </section>
+
+            <!-- Upload Section -->
+            <section class="upload-section">
+                <h2>Step 1: Upload Document</h2>
+                <div class="upload-box">
+                    <input 
+                        type="file" 
+                        id="fileInput" 
+                        accept=".pdf,.docx,.csv,.txt"
+                        aria-label="Upload document"
+                    >
+                    <label for="fileInput" class="file-label">
+                        <span class="upload-icon">📁</span>
+                        <span class="upload-text">Click to upload or drag & drop</span>
+                        <span class="file-types">PDF, DOCX, CSV, TXT (Max 10MB)</span>
+                    </label>
+                </div>
+                <div id="fileName" class="file-name"></div>
+            </section>
+
+            <!-- Question Section -->
+            <section class="question-section">
+                <h2>Step 2: Ask Your Question</h2>
+                <textarea 
+                    id="questionInput" 
+                    class="question-textarea" 
+                    placeholder="Enter your question about the document..."
+                    rows="4"
+                    disabled
+                ></textarea>
+
+                <!-- Prompt Type Selection -->
+                <div class="prompt-type-container">
+                    <label for="promptType">Response Type:</label>
+                    <select id="promptType" class="prompt-type-select" disabled>
+                        <option value="default">Default</option>
+                        <option value="detailed">Detailed</option>
+                        <option value="concise">Concise</option>
+                        <option value="technical">Technical</option>
+                    </select>
+                </div>
+
+                <!-- Submit Button -->
+                <button id="submitBtn" class="submit-btn" disabled>
+                    Submit Question
+                </button>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <h2>Results</h2>
+                
+                <!-- Loading Spinner -->
+                <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Processing your question...</p>
+                </div>
+
+                <!-- Results Content -->
+                <div id="resultsContent" style="display: none;">
+                    <div class="result-item">
+                        <h3>Answer</h3>
+                        <div id="answerBox" class="answer-box"></div>
+                    </div>
+
+                    <div class="result-metadata">
+                        <div class="metadata-item">
+                            <span class="label">Model:</span>
+                            <span id="modelInfo" class="value">-</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="label">Response Time:</span>
+                            <span id="responseTime" class="value">-</span>
+                        </div>
+                    </div>
+
+                    <button id="resetBtn" class="reset-btn">
+                        Ask Another Question
+                    </button>
+                </div>
+
+                <!-- Error Message -->
+                <div id="errorBox" class="error-box" style="display: none;"></div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Q&A Bot v1.0.0 | Powered by LangChain & AI Models</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
